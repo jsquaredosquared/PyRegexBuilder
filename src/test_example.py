@@ -34,3 +34,7 @@ regex = Regex(
 
 result = re.findall(regex, test_text)
 print(result)
+
+field_separator = Regex(RegexString(r"\s{2,}|\t")).compile()
+replaced_with_tabs = re.sub(field_separator, r"\t", test_text)
+print(replaced_with_tabs)

@@ -8,3 +8,4 @@ PyRegexBuilder allows you to build regular expressions using a DSL inspired by [
 
 - [TS Regex Builder](https://github.com/callstack/ts-regex-builder) (also based on Swift RegexBuilder)
 - [Edify](https://github.com/luciferreeves/edify) (based on [Super Expressive](https://github.com/francisrstokes/super-expressive))
+- [Humre](https://github.com/asweigart/humre)

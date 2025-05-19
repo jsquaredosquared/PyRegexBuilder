@@ -1,5 +1,6 @@
 import re
 from abc import ABC
+from enum import Enum
 
 
 class RegexBuilderException(Exception):
@@ -20,9 +21,15 @@ class RegexComponent(ABC):
         )
 
 
-class SpecialSequence(RegexComponent):
-    def __init__(self, sequence: str) -> None:
-        self.regex = sequence
+class RegexString(RegexComponent):
+    def __init__(self, string: str) -> None:
+        self.regex = string
+
+
+class Greed(Enum):
+    GREEDY = ""
+    POSSESSIVE = "+"
+    MINIMAL = "?"
 
 
 class One(RegexComponent):
@@ -31,18 +38,24 @@ class One(RegexComponent):
 
 
 class Optionally(RegexComponent):
-    def __init__(self, *components: str | RegexComponent) -> None:
-        self.regex = rf"(?:{self.parse(*components)})?"
+    def __init__(
+        self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
+    ) -> None:
+        self.regex = rf"(?:{self.parse(*components)})?{greed}"
 
 
 class ZeroOrMore(RegexComponent):
-    def __init__(self, *components: str | RegexComponent) -> None:
-        self.regex = rf"(?:{self.parse(*components)})*"
+    def __init__(
+        self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
+    ) -> None:
+        self.regex = rf"(?:{self.parse(*components)})*{greed}"
 
 
 class OneOrMore(RegexComponent):
-    def __init__(self, *components: str | RegexComponent) -> None:
-        self.regex = rf"(?:{self.parse(*components)})+"
+    def __init__(
+        self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
+    ) -> None:
+        self.regex = rf"(?:{self.parse(*components)})+{greed}"
 
 
 class Repeat(RegexComponent):
@@ -52,6 +65,7 @@ class Repeat(RegexComponent):
         count: int | None = None,
         minimum: int | None = None,
         maximum: int | None = None,
+        greed: Greed = Greed.GREEDY,
     ) -> None:
         if (count and (minimum or maximum)) or not (any((count, minimum, maximum))):
             raise RegexBuilderException()
@@ -61,7 +75,7 @@ class Repeat(RegexComponent):
         else:
             m = minimum if minimum else ""
             n = maximum if maximum else ""
-            self.regex = rf"(?:{self.parse(*components)}){{{m},{n}}}"
+            self.regex = rf"(?:{self.parse(*components)}){{{m},{n}}}{greed}"
 
 
 class Capture(RegexComponent):
@@ -72,18 +86,25 @@ class Capture(RegexComponent):
             self.regex = rf"({self.parse(*components)})"
 
 
-ANY = SpecialSequence(r".")
-START_OF_STRING = SpecialSequence(r"^")
-END_OF_STRING = SpecialSequence(r"$")
-WORD = SpecialSequence(r"\w")
-WORD_BOUNDARY = SpecialSequence(r"\b")
-WHITESPACE = SpecialSequence(r"\s")
-DIGIT = SpecialSequence(r"\d")
+class Atomic(RegexComponent):
+    def __init__(self, *components: str | RegexComponent) -> None:
+        self.regex = rf"(?>{self.parse(*components)})"
+
+
+ANY = RegexString(r".")
+START_OF_STRING = RegexString(r"^")
+END_OF_STRING = RegexString(r"$")
+WORD = RegexString(r"\w")
+WORD_BOUNDARY = RegexString(r"\b")
+WHITESPACE = RegexString(r"\s")
+DIGIT = RegexString(r"\d")
 
 
 class ChoiceOf(RegexComponent):
     def __init__(self, *components: str | RegexComponent) -> None:
-        self.regex = rf"{'|'.join(self.parse(component) for component in components)}"
+        self.regex = (
+            rf"(?:{'|'.join(self.parse(component) for component in components)})"
+        )
 
 
 class Lookahead(RegexComponent):
