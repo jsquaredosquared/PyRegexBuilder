@@ -1,6 +1,6 @@
 from enum import Enum
 
-from common import RegexComponent, RegexBuilderException
+from .common import RegexComponent, RegexBuilderException
 
 
 class Greed(Enum):

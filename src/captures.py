@@ -1,4 +1,4 @@
-from common import RegexComponent
+from .common import RegexComponent
 
 
 class Capture(RegexComponent):

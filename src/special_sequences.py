@@ -1,4 +1,4 @@
-from common import RegexString
+from .common import RegexString
 
 ANY = RegexString(r".")
 
