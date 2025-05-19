@@ -45,7 +45,9 @@ class Repeat(RegexComponent):
         greed: Greed = Greed.GREEDY,
     ) -> None:
         if (count and (minimum or maximum)) or not (any((count, minimum, maximum))):
-            raise RegexBuilderException()
+            raise RegexBuilderException(
+                "Must specify either `count` OR `minimum` and/or `maximum`."
+            )
 
         if count:
             self.regex = rf"(?:{self.parse(*components)}{{{count}}})"
