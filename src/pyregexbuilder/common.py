@@ -41,12 +41,6 @@ class RegexComponent(ABC):
             "VERBOSE": "x",
         }
 
-        if sum((flag in flags for flag in ["ASCII", "LOCAL", "UNICODE"])) > 1:
-            raise RegexBuilderException(
-                "The flags ASCII, LOCAL, and UNICODE are mutually exclusive. "
-                "Specify only one of them."
-            )
-
         flags_to_set = set(
             flags_shorthand[flag] for flag in filter(lambda f: flags[f], flags)
         )
