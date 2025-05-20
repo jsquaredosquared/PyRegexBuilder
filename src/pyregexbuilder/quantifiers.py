@@ -5,8 +5,10 @@ from .common import RegexComponent, RegexBuilderException
 
 class Greed(Enum):
     GREEDY = ""
+    EAGER = ""
     POSSESSIVE = "+"
     MINIMAL = "?"
+    RELUCTANT = "?"
 
 
 class One(RegexComponent):
@@ -18,21 +20,21 @@ class Optionally(RegexComponent):
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
-        self.regex = rf"(?:{self.parse(*components)})?{greed}"
+        self.regex = rf"(?:{self.parse(*components)})?{greed.value}"
 
 
 class ZeroOrMore(RegexComponent):
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
-        self.regex = rf"(?:{self.parse(*components)})*{greed}"
+        self.regex = rf"(?:{self.parse(*components)})*{greed.value}"
 
 
 class OneOrMore(RegexComponent):
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
-        self.regex = rf"(?:{self.parse(*components)})+{greed}"
+        self.regex = rf"(?:{self.parse(*components)})+{greed.value}"
 
 
 class Repeat(RegexComponent):
@@ -54,4 +56,4 @@ class Repeat(RegexComponent):
         else:
             m = minimum if minimum else ""
             n = maximum if maximum else ""
-            self.regex = rf"(?:{self.parse(*components)}){{{m},{n}}}{greed}"
+            self.regex = rf"(?:{self.parse(*components)}){{{m},{n}}}{greed.value}"
