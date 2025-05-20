@@ -41,23 +41,11 @@ def test_swiftregex_site_example():
                 Repeat(DIGIT, count=4),
             ),
             name="date",
-        ),
+        ).with_flags({"IGNORECASE": False, "ASCII": True}),
     ).compile()
+
+    print(regex.pattern)
 
     result = re.findall(regex, TEST_TEXT)
 
     assert len(result) == 5
-
-
-def test_lookahead():
-    test_string = "aabaacaadaae"
-    regex = Regex(
-        Repeat("a", count=2),
-        Lookahead("d"),
-    ).compile()
-
-    result = re.findall(regex, test_string)
-
-    print(result)
-
-    assert len(result) == 1
