@@ -9,12 +9,23 @@ class RegexBuilderException(Exception):
 
 class RegexFlagsDict(TypedDict, total=False):
     ASCII: Literal[True]
+    FULLCASE: bool
     IGNORECASE: bool
-    LOCAL: Literal[True]
+    LOCALE: Literal[True]
     MULTILINE: bool
     DOTALL: bool
     UNICODE: Literal[True]
     VERBOSE: bool
+    WORD: bool
+
+
+class RegexGlobalFlagsDict(TypedDict, total=False):
+    BESTMATCH: Literal[True]
+    ENHANCEMATCH: Literal[True]
+    POSIX: Literal[True]
+    REVERSE: Literal[True]
+    VERSION0: Literal[True]
+    VERSION1: Literal[True]
 
 
 class RegexComponent(ABC):
@@ -33,12 +44,14 @@ class RegexComponent(ABC):
     def with_flags(self, flags: RegexFlagsDict):
         flags_shorthand = {
             "ASCII": "a",
+            "FULLCASE": "f",
             "IGNORECASE": "i",
-            "LOCAL": "L",
+            "LOCALE": "L",
             "MULTILINE": "m",
             "DOTALL": "s",
             "UNICODE": "u",
             "VERBOSE": "x",
+            "WORD": "w",
         }
 
         flags_to_set = set(
@@ -51,6 +64,20 @@ class RegexComponent(ABC):
         self.regex = rf"(?{''.join(flags_to_set)}{"-"+''.join(flags_to_remove) if flags_to_remove else ''}:{self.regex})"
 
         return self
+
+    def with_global_flags(self, flags: RegexGlobalFlagsDict):
+        flags_shorthand = {
+            "BESTMATCH": "b",
+            "ENHANCEMATCH": "e",
+            "POSIX": "p",
+            "REVERSE": "r",
+            "VERSION0": "V0",
+            "VERSION1": "V1",
+        }
+
+        self.regex = (
+            rf"(?{''.join(flags_shorthand[flag] for flag in flags)}){self.regex}"
+        )
 
 
 class RegexString(RegexComponent):
