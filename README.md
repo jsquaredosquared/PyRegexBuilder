@@ -2,7 +2,11 @@
 
 > Build regular expressions swiftly in Python.
 
-PyRegexBuilder allows you to build regular expressions using a DSL similar to that of [Swift RegexBuilder](https://developer.apple.com/documentation/regexbuilder).
+PyRegexBuilder allows you to build regular expressions using a DSL similar to that of [Swift RegexBuilder](https://developer.apple.com/documentation/regexbuilder). It uses the stdlib-compatible [regex](https://github.com/mrabarnett/mrab-regex) module.
+
+## Features to implement
+
+- [ ] Scoped flags
 
 ## See also
 
