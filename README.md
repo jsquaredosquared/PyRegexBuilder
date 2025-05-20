@@ -6,7 +6,8 @@ PyRegexBuilder allows you to build regular expressions using a DSL similar to th
 
 ## Features to implement
 
-- [ ] Scoped flags
+- [ ] Scoped and global flags
+- [ ] Character classes and set operations
 
 ## See also
 
