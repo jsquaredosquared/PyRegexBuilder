@@ -8,8 +8,9 @@ PyRegexBuilder uses the stdlib-compatible [regex](https://github.com/mrabarnett/
 
 ## Features to implement
 
-- [ ] Scoped and global flags
+- [x] Scoped and global flags
 - [ ] Character classes and set operations
+- [ ] Combine RegexComponent and Regex into Regexp
 
 ## See also
 
