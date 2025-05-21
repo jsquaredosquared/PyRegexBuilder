@@ -10,8 +10,8 @@ class Capture(RegexComponent):
 
 
 class Reference(RegexComponent):
-    def __init__(self, name: str) -> None:
-        self.regex = rf"(?P={name})"
+    def __init__(self, ref: str | int) -> None:
+        self.regex = rf"\g<{ref}>"
 
 
 class Atomic(RegexComponent):
