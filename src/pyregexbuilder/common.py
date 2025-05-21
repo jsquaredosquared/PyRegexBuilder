@@ -41,7 +41,7 @@ class RegexComponent(ABC):
             for component in components
         )
 
-    def set_flags(self, flags: RegexFlagsDict):
+    def with_flags(self, flags: RegexFlagsDict):
         flags_shorthand = {
             "ASCII": "a",
             "FULLCASE": "f",
@@ -65,7 +65,7 @@ class RegexComponent(ABC):
 
         return self
 
-    def set_global_flags(self, flags: RegexGlobalFlagsDict):
+    def with_global_flags(self, flags: RegexGlobalFlagsDict):
         flags_shorthand = {
             "BESTMATCH": "b",
             "ENHANCEMATCH": "e",
