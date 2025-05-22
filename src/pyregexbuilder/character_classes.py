@@ -1,12 +1,9 @@
 # https://www.regular-expressions.info/posixbrackets.html
 
-from copy import deepcopy
 from enum import Enum
 from typing import Iterable, Protocol, overload
 import regex as re
 from .common import RegexComponent, RegexString, RegexBuilderException
-
-ANY = RegexString(r".")
 
 
 class Anchor(Enum):
@@ -15,13 +12,15 @@ class Anchor(Enum):
     WORD_BOUNDARY = RegexString(r"\b")
 
 
-DIGIT = RegexString(r"\d")
-NOT_DIGIT = RegexString(r"\D")
-WHITESPACE = RegexString(r"\s")
-NOT_WHITESPACE = RegexString(r"\S")
-WORD = RegexString(r"\w")
-NOT_WORD = RegexString(r"\W")
-GRAPHEME = RegexString(r"\X")
+class Character(Enum):
+    ANY = RegexString(r".")
+    DIGIT = RegexString(r"\d")
+    NOT_DIGIT = RegexString(r"\D")
+    WHITESPACE = RegexString(r"\s")
+    NOT_WHITESPACE = RegexString(r"\S")
+    WORD = RegexString(r"\w")
+    NOT_WORD = RegexString(r"\W")
+    GRAPHEME = RegexString(r"\X")
 
 
 class SupportsBracketExpression(RegexComponent, Protocol):
