@@ -32,5 +32,6 @@ class TestGroups:
     def test_atomic(self):
         pass
 
+
 class TestCharacterClasses:
-    def test_
+    pass
