@@ -2,7 +2,7 @@
 
 from copy import deepcopy
 from enum import Enum
-from typing import overload
+from typing import Protocol, overload
 import regex as re
 from .common import RegexComponent, RegexString
 
@@ -24,47 +24,63 @@ NOT_WORD = RegexString(r"\W")
 GRAPHEME = RegexString(r"\X")
 
 
-class CharacterClass(RegexComponent):
-    def __init__(self, *character_set: "str | CharacterClass") -> None:
-        self.char_sets = []
-        for char_set in character_set:
-            if isinstance(char_set, str):
-                self.char_sets.append(rf"[{char_set}]")
-            elif isinstance(char_set, CharacterClass):
-                self.char_sets.append(char_set.regex)
+class SupportsBracketExpression(RegexComponent, Protocol):
+    regex: str
+    complement: str
 
-        self.regex = rf"[{'||'.join(self.char_sets)}]"
-        self.complement = re.sub(r"(?<=^\[)", "^", self.regex)
+    def _get_regex_complement(self) -> str:
+        return re.sub(
+            r"(?<=^\[)(?|\^|)", lambda m: "^" if m.group() == "" else "", self.regex
+        )
 
     @property
-    def inverted(self) -> "CharacterClass":
+    def inverted(self) -> "SupportsBracketExpression":
         updated_class = deepcopy(self)
         updated_class.regex = self.complement
-        updated_class.complement = self.regex
+        updated_class.complement = updated_class._get_regex_complement()
         return updated_class
 
-    def intersection(self, other: "CharacterClass") -> "CharacterClass":
+    def intersection(
+        self, other: "SupportsBracketExpression"
+    ) -> "SupportsBracketExpression":
         updated_class = deepcopy(self)
         updated_class.regex = rf"[{self.regex}&&{other.regex}]"
         return updated_class
 
-    def subtracting(self, other: "CharacterClass") -> "CharacterClass":
+    def subtracting(
+        self, other: "SupportsBracketExpression"
+    ) -> "SupportsBracketExpression":
         updated_class = deepcopy(self)
         updated_class.regex = rf"[{self.regex}--{other.regex}]"
         return updated_class
 
-    def symmetric_difference(self, other: "CharacterClass") -> "CharacterClass":
+    def symmetric_difference(
+        self, other: "SupportsBracketExpression"
+    ) -> "SupportsBracketExpression":
         updated_class = deepcopy(self)
         updated_class.regex = rf"[{self.regex}~~{other.regex}]"
         return updated_class
 
-    def union(self, other: "CharacterClass") -> "CharacterClass":
+    def union(self, other: "SupportsBracketExpression") -> "SupportsBracketExpression":
         updated_class = deepcopy(self)
         updated_class.regex = rf"[{self.regex}||{other.regex}]"
         return updated_class
 
 
-class UnicodeProperty(CharacterClass):
+class CharacterClass(SupportsBracketExpression):
+    def __init__(self, *character_set: "str | SupportsBracketExpression") -> None:
+        self.char_sets = []
+        for char_set in character_set:
+            if isinstance(char_set, str):
+                self.char_sets.append(rf"[{char_set}]")
+            else:
+                self.char_sets.append(char_set.regex)
+
+        self.regex = rf"[{'||'.join(self.char_sets)}]"
+        self.complement = self._get_regex_complement()
+
+
+class UnicodeProperty(SupportsBracketExpression):
     @overload
     def __init__(self, *, key: str, value: str) -> None: ...
 
@@ -77,13 +93,19 @@ class UnicodeProperty(CharacterClass):
         if len(set(["key", "value"]).intersection(kwargs.keys())) == 2:
             self.regex = rf"\p{{{kwargs["key"]}={kwargs["value"]}}}"
 
-        self.complement = self.regex.replace("p", "P")
+        self.complement = self._get_regex_complement()
+
+    def _get_regex_complement(self) -> str:
+        raise NotImplementedError()
 
 
-class PosixClass(CharacterClass):
+class PosixClass(SupportsBracketExpression):
     def __init__(self, posix_class) -> None:
         self.regex = rf"[[:{posix_class}:]]"
-        self.complement = rf"[[:^{posix_class}]]"
+        self.complement = self._get_regex_complement()
+
+    def _get_regex_complement(self) -> str:
+        return re.sub(r"(?<=\[\[:)", "^", self.regex)
 
 
 class NamedChar(RegexComponent):

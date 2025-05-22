@@ -1,4 +1,4 @@
-from typing import Literal, TypedDict
+from typing import Literal, TypedDict, Protocol
 from abc import ABC
 import regex as re
 from copy import deepcopy
@@ -29,16 +29,12 @@ class RegexGlobalFlagsDict(TypedDict, total=False):
     VERSION1: Literal[True]
 
 
-class RegexComponent(ABC):
+class RegexComponent(Protocol):
     regex: str
 
     def parse(self, *components: "str | RegexComponent") -> str:
         return "".join(
-            (
-                component.regex
-                if isinstance(component, RegexComponent)
-                else re.escape(component)
-            )
+            re.escape(component) if isinstance(component, str) else component.regex
             for component in components
         )
 
@@ -63,7 +59,11 @@ class RegexComponent(ABC):
         )
 
         updated_component = deepcopy(self)
-        updated_component.regex = rf"(?{''.join(flags_to_set)}{"-"+''.join(flags_to_remove) if flags_to_remove else ''}:{self.regex})"
+        updated_component.regex = (
+            rf"(?{''.join(flags_to_set)}"
+            rf"{"-"+''.join(flags_to_remove) if flags_to_remove else ''}"
+            rf":{self.regex})"
+        )
 
         return updated_component
 
