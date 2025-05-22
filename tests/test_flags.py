@@ -42,10 +42,8 @@ def test_swiftregex_site_example():
             ),
             name="date",
         ).with_flags({"IGNORECASE": False, "ASCII": True}),
-    ).compile()
+    )
 
-    print(regex.pattern)
-
-    result = re.findall(regex, TEST_TEXT)
+    result = re.findall(regex.compile(), TEST_TEXT)
 
     assert len(result) == 5

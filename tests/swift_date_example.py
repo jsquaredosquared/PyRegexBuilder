@@ -52,3 +52,5 @@ def date_replace(regex_match: re.Match[str]) -> str:
 
 
 print(re.sub(regex, date_replace, ledger))
+
+arrow.get()
