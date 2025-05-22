@@ -32,35 +32,26 @@ class SupportsBracketExpression(RegexComponent, Protocol):
 
     @property
     def inverted(self) -> "SupportsBracketExpression":
-        updated_class = deepcopy(self)
-        updated_class._regex = self._get_regex_complement()
-        return updated_class
+        inverted_regex = self._get_regex_complement()
+        return CharacterClass(rf"/{inverted_regex}/")
 
     def intersection(
         self, other: "SupportsBracketExpression"
     ) -> "SupportsBracketExpression":
-        updated_class = deepcopy(self)
-        updated_class._regex = rf"[{self._regex}&&{other._regex}]"
-        return updated_class
+        return CharacterClass(rf"/[{self.regex}&&{other.regex}]/")
 
     def subtracting(
         self, other: "SupportsBracketExpression"
     ) -> "SupportsBracketExpression":
-        updated_class = deepcopy(self)
-        updated_class._regex = rf"[{self._regex}--{other._regex}]"
-        return updated_class
+        return CharacterClass(rf"/[{self.regex}--{other.regex}]/")
 
     def symmetric_difference(
         self, other: "SupportsBracketExpression"
     ) -> "SupportsBracketExpression":
-        updated_class = deepcopy(self)
-        updated_class._regex = rf"[{self._regex}~~{other._regex}]"
-        return updated_class
+        return CharacterClass(rf"/[{self.regex}~~{other.regex}]/")
 
     def union(self, other: "SupportsBracketExpression") -> "SupportsBracketExpression":
-        updated_class = deepcopy(self)
-        updated_class._regex = rf"[{self._regex}||{other._regex}]"
-        return updated_class
+        return CharacterClass(rf"/[{self.regex}||{other.regex}]/")
 
 
 class CharacterClass(SupportsBracketExpression):
