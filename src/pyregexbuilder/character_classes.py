@@ -26,7 +26,6 @@ GRAPHEME = RegexString(r"\X")
 
 class SupportsBracketExpression(RegexComponent, Protocol):
     _regex: str
-    complement: str
 
     def _get_regex_complement(self) -> str:
         return re.sub(
