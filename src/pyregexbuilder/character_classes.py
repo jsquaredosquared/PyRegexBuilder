@@ -2,7 +2,7 @@
 
 from copy import deepcopy
 from enum import Enum
-from typing import Protocol, overload
+from typing import Iterable, Protocol, overload
 import regex as re
 from .common import RegexComponent, RegexString
 
@@ -65,17 +65,13 @@ class SupportsBracketExpression(RegexComponent, Protocol):
 
 class CharacterClass(SupportsBracketExpression):
     def __init__(self, *character_set: "str | SupportsBracketExpression") -> None:
-        char_sets = []
-        for char_set in character_set:
-            if isinstance(char_set, str):
-                if re.match(r"^\[.+\]$", char_set):
-                    char_sets.append(char_set)
-                else:
-                    char_sets.append(rf"[{re.escape(char_set)}]")
-            else:
-                char_sets.append(char_set.regex)
+        char_sets = [self.parse(component) for component in character_set]
 
         self._regex = rf"[{'||'.join(char_sets)}]"
+
+    @staticmethod
+    def any_of(character_sequence: Iterable) -> "CharacterClass":
+        return CharacterClass(rf"/[{re.escape(''.join(character_sequence))}]/")
 
 
 class UnicodeProperty(SupportsBracketExpression):

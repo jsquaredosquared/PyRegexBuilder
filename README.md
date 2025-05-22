@@ -20,15 +20,14 @@ PyRegex builder aims to support as many `regex` module features as possible.
 ### High priority
 
 - [x] Scoped and global flags
-- [ ] Negation/inversion
-- [ ] Character classes and set operations
-- [ ] Unicode codepoint properties
-- [ ] Named characters ("\N{}")
-- [ ] Posix character classes
+- [x] Negation/inversion
+- [x] Character classes and set operations
+- [x] Unicode codepoint properties
+- [x] Named characters ("\N{}")
+- [x] Posix character classes
 - [ ] Search anchor
-- [ ] Support regex literals ("/.../")?
-- [ ] Switch from using abc to typing.Protocol?
-- [ ] Combine RegexComponent and Regex into Regexp?
+- [x] Support regex literals ("/.../")?
+- [x] Switch from using abc to typing.Protocol?
 
 ### Low priority
 
