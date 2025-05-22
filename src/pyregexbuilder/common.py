@@ -1,6 +1,5 @@
 from typing import Literal, TypedDict, Protocol
 import regex as re
-from copy import deepcopy
 
 
 class RegexBuilderException(Exception):
@@ -53,7 +52,7 @@ class RegexComponent(Protocol):
 
         return "".join(patterns)
 
-    def with_flags(self, flags: RegexFlagsDict):
+    def with_flags(self, flags: RegexFlagsDict) -> "Regex":
         flags_shorthand = {
             "ASCII": "a",
             "FULLCASE": "f",
@@ -73,16 +72,13 @@ class RegexComponent(Protocol):
             flags_shorthand[flag] for flag in filter(lambda f: not flags[f], flags)
         )
 
-        updated_component = deepcopy(self)
-        updated_component._regex = (
-            rf"(?{''.join(flags_to_set)}"
+        return Regex(
+            rf"/(?{''.join(flags_to_set)}"
             rf"{"-"+''.join(flags_to_remove) if flags_to_remove else ''}"
-            rf":{self._regex})"
+            rf":{self._regex})/"
         )
 
-        return updated_component
-
-    def with_global_flags(self, flags: RegexGlobalFlagsDict):
+    def with_global_flags(self, flags: RegexGlobalFlagsDict) -> "Regex":
         flags_shorthand = {
             "BESTMATCH": "b",
             "ENHANCEMATCH": "e",
@@ -92,13 +88,9 @@ class RegexComponent(Protocol):
             "VERSION1": "V1",
         }
 
-        updated_component = deepcopy(self)
-
-        updated_component._regex = (
-            rf"(?{''.join(flags_shorthand[flag] for flag in flags)}){self._regex}"
+        return Regex(
+            rf"/(?{''.join(flags_shorthand[flag] for flag in flags)}){self._regex}/"
         )
-
-        return updated_component
 
 
 class RegexString(RegexComponent):

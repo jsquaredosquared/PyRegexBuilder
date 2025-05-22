@@ -99,6 +99,6 @@ class PosixClass(SupportsBracketExpression):
         )
 
 
-class NamedChar(RegexComponent):
+class NamedCharacter(RegexComponent):
     def __init__(self, name) -> None:
         self._regex = rf"\N{{{name}}}"
