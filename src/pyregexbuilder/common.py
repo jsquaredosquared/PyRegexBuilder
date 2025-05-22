@@ -1,6 +1,7 @@
 from typing import Literal, TypedDict
 from abc import ABC
 import regex as re
+from copy import deepcopy
 
 
 class RegexBuilderException(Exception):
@@ -41,7 +42,7 @@ class RegexComponent(ABC):
             for component in components
         )
 
-    def set_flags(self, flags: RegexFlagsDict):
+    def with_flags(self, flags: RegexFlagsDict):
         flags_shorthand = {
             "ASCII": "a",
             "FULLCASE": "f",
@@ -61,11 +62,12 @@ class RegexComponent(ABC):
             flags_shorthand[flag] for flag in filter(lambda f: not flags[f], flags)
         )
 
-        self.regex = rf"(?{''.join(flags_to_set)}{"-"+''.join(flags_to_remove) if flags_to_remove else ''}:{self.regex})"
+        updated_component = deepcopy(self)
+        updated_component.regex = rf"(?{''.join(flags_to_set)}{"-"+''.join(flags_to_remove) if flags_to_remove else ''}:{self.regex})"
 
-        return self
+        return updated_component
 
-    def set_global_flags(self, flags: RegexGlobalFlagsDict):
+    def with_global_flags(self, flags: RegexGlobalFlagsDict):
         flags_shorthand = {
             "BESTMATCH": "b",
             "ENHANCEMATCH": "e",
@@ -75,9 +77,13 @@ class RegexComponent(ABC):
             "VERSION1": "V1",
         }
 
-        self.regex = (
+        updated_component = deepcopy(self)
+
+        updated_component.regex = (
             rf"(?{''.join(flags_shorthand[flag] for flag in flags)}){self.regex}"
         )
+
+        return updated_component
 
 
 class RegexString(RegexComponent):
