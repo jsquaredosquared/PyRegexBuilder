@@ -44,7 +44,7 @@ class RegexComponent(Protocol):
 
         for component in components:
             if isinstance(component, str):
-                if re.match(r"^/.+/$", component):
+                if re.match(r"^/.*/$", component):
                     patterns.append(component[1:-1])
                 else:
                     patterns.append(re.escape(component))

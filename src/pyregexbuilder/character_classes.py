@@ -4,7 +4,7 @@ from copy import deepcopy
 from enum import Enum
 from typing import Iterable, Protocol, overload
 import regex as re
-from .common import RegexComponent, RegexString
+from .common import RegexComponent, RegexString, RegexBuilderException
 
 ANY = RegexString(r".")
 
@@ -65,6 +65,10 @@ class SupportsBracketExpression(RegexComponent, Protocol):
 
 class CharacterClass(SupportsBracketExpression):
     def __init__(self, *character_set: "str | SupportsBracketExpression") -> None:
+        str_args = filter(lambda s: isinstance(s, str), character_set)
+        if any(not re.match(r"^/[.*]/$", arg) for arg in str_args):
+            raise RegexBuilderException()
+
         char_sets = [self.parse(component) for component in character_set]
 
         self._regex = rf"[{'||'.join(char_sets)}]"
@@ -84,8 +88,10 @@ class UnicodeProperty(SupportsBracketExpression):
     def __init__(self, *args, **kwargs) -> None:
         if len(args) == 1:
             self._regex = rf"\p{{{args[0]}}}"
-        if len(set(["key", "value"]).intersection(kwargs.keys())) == 2:
+        elif len(set(["key", "value"]).intersection(kwargs.keys())) == 2:
             self._regex = rf"\p{{{kwargs["key"]}={kwargs["value"]}}}"
+        else:
+            raise RegexBuilderException()
 
     def _get_regex_complement(self) -> str:
         return re.sub(
