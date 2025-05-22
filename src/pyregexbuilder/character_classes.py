@@ -25,7 +25,7 @@ GRAPHEME = RegexString(r"\X")
 
 
 class SupportsBracketExpression(RegexComponent, Protocol):
-    regex: str
+    _regex: str
     complement: str
 
     def _get_regex_complement(self) -> str:
@@ -36,8 +36,7 @@ class SupportsBracketExpression(RegexComponent, Protocol):
     @property
     def inverted(self) -> "SupportsBracketExpression":
         updated_class = deepcopy(self)
-        updated_class.regex = self.complement
-        updated_class.complement = updated_class._get_regex_complement()
+        updated_class.regex = self._get_regex_complement()
         return updated_class
 
     def intersection(
@@ -69,15 +68,14 @@ class SupportsBracketExpression(RegexComponent, Protocol):
 
 class CharacterClass(SupportsBracketExpression):
     def __init__(self, *character_set: "str | SupportsBracketExpression") -> None:
-        self.char_sets = []
+        char_sets = []
         for char_set in character_set:
             if isinstance(char_set, str):
-                self.char_sets.append(rf"[{char_set}]")
+                char_sets.append(rf"[{char_set}]")
             else:
-                self.char_sets.append(char_set.regex)
+                char_sets.append(char_set.regex)
 
-        self.regex = rf"[{'||'.join(self.char_sets)}]"
-        self.complement = self._get_regex_complement()
+        self.regex = rf"[{'||'.join(char_sets)}]"
 
 
 class UnicodeProperty(SupportsBracketExpression):
@@ -93,19 +91,20 @@ class UnicodeProperty(SupportsBracketExpression):
         if len(set(["key", "value"]).intersection(kwargs.keys())) == 2:
             self.regex = rf"\p{{{kwargs["key"]}={kwargs["value"]}}}"
 
-        self.complement = self._get_regex_complement()
-
     def _get_regex_complement(self) -> str:
-        raise NotImplementedError()
+        return re.sub(
+            r"(?<=^\\)[pP]", lambda m: "P" if m.group() == "p" else "p", self.regex
+        )
 
 
 class PosixClass(SupportsBracketExpression):
     def __init__(self, posix_class) -> None:
         self.regex = rf"[[:{posix_class}:]]"
-        self.complement = self._get_regex_complement()
 
     def _get_regex_complement(self) -> str:
-        return re.sub(r"(?<=\[\[:)", "^", self.regex)
+        return re.sub(
+            r"(?<=^\[\[:)(?|\^|)", lambda m: "^" if m.group() == "" else "", self.regex
+        )
 
 
 class NamedChar(RegexComponent):

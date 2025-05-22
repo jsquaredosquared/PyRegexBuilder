@@ -1,5 +1,4 @@
 from typing import Literal, TypedDict, Protocol
-from abc import ABC
 import regex as re
 from copy import deepcopy
 
@@ -30,7 +29,15 @@ class RegexGlobalFlagsDict(TypedDict, total=False):
 
 
 class RegexComponent(Protocol):
-    regex: str
+    _regex: str
+
+    @property
+    def regex(self):
+        return self._regex
+
+    @regex.setter
+    def regex(self, expr: str):
+        self._regex = expr
 
     def parse(self, *components: "str | RegexComponent") -> str:
         return "".join(
