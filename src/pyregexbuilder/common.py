@@ -35,15 +35,23 @@ class RegexComponent(Protocol):
     def regex(self):
         return self._regex
 
-    @regex.setter
-    def regex(self, expr: str):
-        self._regex = expr
+    # @regex.setter
+    # def regex(self, expr: str):
+    #     self._regex = expr
 
     def parse(self, *components: "str | RegexComponent") -> str:
-        return "".join(
-            re.escape(component) if isinstance(component, str) else component.regex
-            for component in components
-        )
+        patterns = []
+
+        for component in components:
+            if isinstance(component, str):
+                if re.match(r"^/.+/$", component):
+                    patterns.append(component[1:-1])
+                else:
+                    patterns.append(re.escape(component))
+            else:
+                patterns.append(component.regex)
+
+        return "".join(patterns)
 
     def with_flags(self, flags: RegexFlagsDict):
         flags_shorthand = {
@@ -66,10 +74,10 @@ class RegexComponent(Protocol):
         )
 
         updated_component = deepcopy(self)
-        updated_component.regex = (
+        updated_component._regex = (
             rf"(?{''.join(flags_to_set)}"
             rf"{"-"+''.join(flags_to_remove) if flags_to_remove else ''}"
-            rf":{self.regex})"
+            rf":{self._regex})"
         )
 
         return updated_component
@@ -86,8 +94,8 @@ class RegexComponent(Protocol):
 
         updated_component = deepcopy(self)
 
-        updated_component.regex = (
-            rf"(?{''.join(flags_shorthand[flag] for flag in flags)}){self.regex}"
+        updated_component._regex = (
+            rf"(?{''.join(flags_shorthand[flag] for flag in flags)}){self._regex}"
         )
 
         return updated_component
@@ -95,19 +103,19 @@ class RegexComponent(Protocol):
 
 class RegexString(RegexComponent):
     def __init__(self, string: str) -> None:
-        self.regex = string
+        self._regex = string
 
 
 class Regex(RegexComponent):
     def __init__(self, *components: str | RegexComponent) -> None:
-        self.regex = self.parse(*components)
+        self._regex = self.parse(*components)
 
     def compile(self, *args, **kwargs):
-        return re.compile(self.regex, *args, **kwargs)
+        return re.compile(self._regex, *args, **kwargs)
 
 
 class ChoiceOf(RegexComponent):
     def __init__(self, *components: str | RegexComponent) -> None:
-        self.regex = (
+        self._regex = (
             rf"(?:{'|'.join(self.parse(component) for component in components)})"
         )

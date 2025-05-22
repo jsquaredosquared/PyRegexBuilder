@@ -13,28 +13,28 @@ class Greed(Enum):
 
 class One(RegexComponent):
     def __init__(self, *components: str | RegexComponent) -> None:
-        self.regex = rf"(?:{self.parse(*components)}){1}"
+        self._regex = rf"(?:{self.parse(*components)}){1}"
 
 
 class Optionally(RegexComponent):
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
-        self.regex = rf"(?:{self.parse(*components)})?{greed.value}"
+        self._regex = rf"(?:{self.parse(*components)})?{greed.value}"
 
 
 class ZeroOrMore(RegexComponent):
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
-        self.regex = rf"(?:{self.parse(*components)})*{greed.value}"
+        self._regex = rf"(?:{self.parse(*components)})*{greed.value}"
 
 
 class OneOrMore(RegexComponent):
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
-        self.regex = rf"(?:{self.parse(*components)})+{greed.value}"
+        self._regex = rf"(?:{self.parse(*components)})+{greed.value}"
 
 
 class Repeat(RegexComponent):
@@ -52,8 +52,8 @@ class Repeat(RegexComponent):
             )
 
         if count:
-            self.regex = rf"(?:{self.parse(*components)}{{{count}}})"
+            self._regex = rf"(?:{self.parse(*components)}{{{count}}})"
         else:
             m = minimum if minimum else ""
             n = maximum if maximum else ""
-            self.regex = rf"(?:{self.parse(*components)}){{{m},{n}}}{greed.value}"
+            self._regex = rf"(?:{self.parse(*components)}){{{m},{n}}}{greed.value}"
