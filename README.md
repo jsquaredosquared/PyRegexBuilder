@@ -6,11 +6,40 @@ PyRegexBuilder allows you to build regular expressions using a DSL similar to th
 
 PyRegexBuilder uses the stdlib-compatible [regex](https://github.com/mrabarnett/mrab-regex) module.
 
-## Features to implement
+## Usage
+
+## Installation
+
+```shell
+```
+
+## Roadmap
+
+PyRegex builder aims to support as many `regex` module features as possible.
+
+### High priority
 
 - [x] Scoped and global flags
+- [ ] Negation/inversion
 - [ ] Character classes and set operations
-- [ ] Combine RegexComponent and Regex into Regexp
+- [ ] Unicode codepoint properties
+- [ ] Named characters ("\N{}")
+- [ ] Posix character classes
+- [ ] Search anchor
+- [ ] Support regex literals ("/.../")?
+- [ ] Switch from using abc to typing.Protocol?
+- [ ] Combine RegexComponent and Regex into Regexp?
+
+### Low priority
+
+- [ ] Branch reset
+- [ ] Fuzzy matching
+- [ ] Named list
+- [ ] Define, prune, skip, fail
+
+## Contributing
+
+## License
 
 ## See also
 
