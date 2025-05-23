@@ -4,7 +4,7 @@ Here is a demo to showcase the use of PyRegexBuilder.
 
 ## Problem
 
-Hidden in the `text` below is a Cyrillic letter that is preceded by no more or less than 2 Greek or Latin letters.
+Hidden in the `text` below is a Cyrillic letter that is preceded by exactly 2 Greek or Latin letters (no more, no less).
 
 ```python
 text = "ウثイا月εЗ人水جИ山γבИЖㄱتאEイЖבИBДE人ججイEㄷجاجㄷアЗاجاㄴACㄴDAエβエЖאג月水水ㄹجAㅁDبエα山הبتウИג月Aاイب山αثㄴاИδㄹ水ア人ㄹتεדβE山ㄴבㅁEאЙエㄷ山אباγجウㄹثㅁEЗИ日山イ日ثاㄷβBAㅁЖ水ㅁ山日水ㅁ人Иオבㄴγב月ت月اβアהγبβㄱبИㄱبオتㅁエ水αEتㄷAアדㄱبדDדㄱエㄹ水ثД山ㄱباイβاイ水δㄹЗㄹ月γB山ЗAアイαEИبДجЖεتИγㅁאاオㄷDЙアEεイㄹAثЖדD日山日δδDИCب月ЗבαتγウЖדبج日גBبהイㄱㅁ月月月ЖجBㄱגエבДجבㄱㅁㄱ人"
@@ -51,7 +51,7 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
     expression = (
         Regex(
             PositiveLookbehind(
-                greek_or_latin.inverted,
+                Optionally(greek_or_latin.inverted),
                 Repeat(greek_or_latin, count=2)
             )
         )
@@ -109,7 +109,7 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
     expression = (
         Regex(
             PositiveLookbehind(
-                greek_or_latin.inverted,
+                Optionally(greek_or_latin.inverted),
                 Repeat(
                     greek_or_latin,
                     count=2,
@@ -124,5 +124,5 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
 
     match = re.search(expression, text)
 
-    letter = match.groupdict()["character"]
+    print(match)
     ```
