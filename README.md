@@ -7,7 +7,7 @@
 
 ## Usage
 
-See the documentation.
+See the [documentation](https://jsquaredosquared.github.io/PyRegexBuilder/).
 
 ## Roadmap
 
