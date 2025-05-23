@@ -29,6 +29,8 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
     greek_or_latin = PosixClass("IsGreek").union(UnicodeClass("IsLatin"))
     ```
 
+    See the available [character classes](api-reference/character-classes.md).
+
 3. Now let's start constructing the regular expression.
 
     ```python
@@ -56,6 +58,8 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
     )
     ```
 
+    See the available [assertions](api-reference/assertions.md) and [quantifiers](api-reference/quantifiers.md).
+
 5. After looking behind, capture the current letter if it is part of the Cyrillic alphabet.
 
     ```python
@@ -71,7 +75,11 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
     )
     ```
 
+    Groups can be named unnamed. See the available [groups](api-reference/groups.md).
+
 6. Set the flags for the regular expression and compile.
+
+    (Here, these flags are not necessary; they are just an example.)
 
     ```python
     greek_or_latin = PosixClass("IsGreek").union(UnicodeClass("IsLatin"))
@@ -80,10 +88,13 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
         Regex(
             ...
         )
+        .with_flags({"IGNORECASE": True})
         .with_global_flags({"VERSION1": True})
         .compile()
     )
     ```
+
+    See the available scoped and global flags [here](api-reference/common.md).
 
 7. Now you can use the regular expression. Here is the full code:
 
@@ -106,6 +117,7 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
             ),
             Capture(PosixClass("IsCyrillic"), name="character"),
         )
+        .with_flags({"IGNORECASE": True})
         .with_global_flags({"VERSION1": True})
         .compile()
     )

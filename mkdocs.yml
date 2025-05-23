@@ -1,3 +1,5 @@
+repo_url: https://github.com/jsquaredosquared/PyRegexBuilder
+
 site_name: PyRegexBuilder
 nav:
   - Home: index.md
@@ -14,6 +16,10 @@ theme:
   palette:
     scheme: slate
     primary: deep orange
+  features:
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github-alt
 
 plugins:
   - search
