@@ -17,6 +17,10 @@ class One(RegexComponent):
 
 
 class Optionally(RegexComponent):
+    """
+    A regex component that matches zero or one occurrences of the supplied regex components.
+    """
+
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
@@ -24,6 +28,10 @@ class Optionally(RegexComponent):
 
 
 class ZeroOrMore(RegexComponent):
+    """
+    A regex component that matches zero or more occurrences of the supplied regex components.
+    """
+
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
@@ -31,6 +39,10 @@ class ZeroOrMore(RegexComponent):
 
 
 class OneOrMore(RegexComponent):
+    """
+    A regex component that matches one or more occurrences of the supplied regex components.
+    """
+
     def __init__(
         self, *components: str | RegexComponent, greed: Greed = Greed.GREEDY
     ) -> None:
@@ -38,9 +50,13 @@ class OneOrMore(RegexComponent):
 
 
 class Repeat(RegexComponent):
+    """
+    A regex component that matches the specified number of occurrences of the supplied regex components.
+    """
+
     def __init__(
         self,
-        *components,
+        *components: str | RegexComponent,
         count: int | None = None,
         minimum: int | None = None,
         maximum: int | None = None,

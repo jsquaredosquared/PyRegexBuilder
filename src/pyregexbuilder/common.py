@@ -3,10 +3,18 @@ import regex as re
 
 
 class RegexBuilderException(Exception):
+    """
+    General exception thrown if problems arise during the building of a regular expression.
+    """
+
     pass
 
 
 class RegexFlagsDict(TypedDict, total=False):
+    """
+    A mapping of scoped flags that can apply to only part of regular expression.
+    """
+
     ASCII: Literal[True]
     FULLCASE: bool
     IGNORECASE: bool
@@ -19,6 +27,10 @@ class RegexFlagsDict(TypedDict, total=False):
 
 
 class RegexGlobalFlagsDict(TypedDict, total=False):
+    """
+    A mapping of flags that apply to the entire regular expression.
+    """
+
     BESTMATCH: Literal[True]
     ENHANCEMATCH: Literal[True]
     POSIX: Literal[True]
@@ -28,15 +40,18 @@ class RegexGlobalFlagsDict(TypedDict, total=False):
 
 
 class RegexComponent(Protocol):
+    """
+    A protocol for classes that can be used as components in the regex builder.
+    """
+
     _regex: str
 
     @property
-    def regex(self):
+    def regex(self) -> str:
+        """
+        The string corresponding to the regular expression returned by a RegexComponent.
+        """
         return self._regex
-
-    # @regex.setter
-    # def regex(self, expr: str):
-    #     self._regex = expr
 
     def parse(self, *components: "str | RegexComponent") -> str:
         patterns = []
@@ -53,6 +68,9 @@ class RegexComponent(Protocol):
         return "".join(patterns)
 
     def with_flags(self, flags: RegexFlagsDict) -> "Regex":
+        """
+        Returns a copy of the `Regex` object with the corresponding scoped flags set.
+        """
         flags_shorthand = {
             "ASCII": "a",
             "FULLCASE": "f",
@@ -79,6 +97,9 @@ class RegexComponent(Protocol):
         )
 
     def with_global_flags(self, flags: RegexGlobalFlagsDict) -> "Regex":
+        """
+        Returns a copy of the `Regex` object with the corresponding global flags set.
+        """
         flags_shorthand = {
             "BESTMATCH": "b",
             "ENHANCEMATCH": "e",
@@ -93,12 +114,11 @@ class RegexComponent(Protocol):
         )
 
 
-class RegexString(RegexComponent):
-    def __init__(self, string: str) -> None:
-        self._regex = string
-
-
 class Regex(RegexComponent):
+    """
+    The entry point for building a regular expression.
+    """
+
     def __init__(self, *components: str | RegexComponent) -> None:
         self._regex = self.parse(*components)
 
@@ -107,6 +127,12 @@ class Regex(RegexComponent):
 
 
 class ChoiceOf(RegexComponent):
+    """
+    A regex component that matches any of the supplied regex components.
+
+    Regex: `|`
+    """
+
     def __init__(self, *components: str | RegexComponent) -> None:
         self._regex = (
             rf"(?:{'|'.join(self.parse(component) for component in components)})"
