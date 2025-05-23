@@ -1,0 +1,21 @@
+site_name: PyRegexBuilder
+nav:
+  - Home: index.md
+  - Tutorial: tutorial.md
+  - API reference:
+      - Common: api-reference/common.md
+      - Assertions: api-reference/assertions.md
+      - Character classes: api-reference/character-classes.md
+      - Groups: api-reference/groups.md
+      - Quantifiers: api-reference/quantifiers.md
+theme: material
+
+plugins:
+  - search
+  - mkdocstrings
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true

@@ -1,5 +1,5 @@
 [project]
-name = "regex-builder"
+name = "pyregexbuilder"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -10,4 +10,11 @@ dependencies = ["regex>=2024.11.6"]
 addopts = ["--import-mode=importlib"]
 
 [dependency-groups]
-dev = ["arrow>=1.3.0", "coconut>=3.1.2", "pytest>=8.3.5"]
+dev = [
+    "arrow>=1.3.0",
+    "coconut>=3.1.2",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.14",
+    "mkdocstrings[python]>=0.29.1",
+    "pytest>=8.3.5",
+]
