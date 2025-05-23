@@ -4,7 +4,7 @@ import regex as re
 
 class RegexBuilderException(Exception):
     """
-    General exception thrown if problems arise during the building of a regular expression.
+    A general exception thrown when problems arise during the building of a regular expression.
     """
 
     pass

@@ -22,7 +22,7 @@ def test_homepage_example():
         ),
     ).compile()
 
-    text = "My email is my.name@example.com"
+    text = "My email is my.name@example.com."
 
     if match := re.search(email_pattern, text):
         name, domain = match.groups()
