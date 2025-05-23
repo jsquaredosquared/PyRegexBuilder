@@ -37,9 +37,9 @@
 
 - 🔎 **Extensive regular expression support**: PyRegexBuilder is made possible thanks to the feature-rich [regex](https://github.com/mrabarnett/mrab-regex) module.
 
-!!! danger
-    - 🛠️ This is still a work in progress, and the API may change.
-    - 🐛 If you find a bug or have a suggestion, please open an issue or pull request.
+    !!! danger
+        - 🛠️ This is still a work in progress, and the API may change.
+        - 🐛 If you find a bug or have a suggestion, please open an issue or pull request.
 
 ## Quickstart
 
