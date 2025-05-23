@@ -4,7 +4,7 @@
 
 ## Features
 
-- 🧩 **Simple yet powerful DSL**: PyRegexBuilder allows you to build regular expressions using a DSL similar to that of [Swift RegexBuilder](https://developer.apple.com/documentation/regexbuilder). This can make it easier to compose and maintain regexes while still harnessing their many features.
+- 🧩 **Simple yet powerful DSL**: PyRegexBuilder allows you to build regular expressions using a DSL similar to that of [Swift RegexBuilder](https://developer.apple.com/documentation/regexbuilder). This makes it easier to compose and maintain regexes while still harnessing their many features.
 
     ```python
     from pyregexbuilder import Character, Regex, Capture, ZeroOrMore, OneOrMore
