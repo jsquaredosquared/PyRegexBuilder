@@ -8,6 +8,7 @@ nav:
       - Character classes: api-reference/character-classes.md
       - Groups: api-reference/groups.md
       - Quantifiers: api-reference/quantifiers.md
+  - Contributing: contributing.md
 theme: material
 
 plugins:
