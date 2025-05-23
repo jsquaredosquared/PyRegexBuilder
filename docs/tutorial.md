@@ -51,7 +51,7 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
     expression = (
         Regex(
             PositiveLookbehind(
-                Optionally(greek_or_latin.inverted),
+                ChoiceOf(Anchor.WORD_BOUNDARY, greek_or_latin.inverted),
                 Repeat(greek_or_latin, count=2)
             )
         )
@@ -109,7 +109,7 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
     expression = (
         Regex(
             PositiveLookbehind(
-                Optionally(greek_or_latin.inverted),
+                ChoiceOf(Anchor.WORD_BOUNDARY, greek_or_latin.inverted),
                 Repeat(
                     greek_or_latin,
                     count=2,
