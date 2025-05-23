@@ -9,7 +9,11 @@ nav:
       - Groups: api-reference/groups.md
       - Quantifiers: api-reference/quantifiers.md
   - Contributing: contributing.md
-theme: material
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: deep orange
 
 plugins:
   - search
