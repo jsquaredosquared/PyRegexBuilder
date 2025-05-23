@@ -75,7 +75,7 @@ Let's see how we would go about coming up with a solution using PyRegexBuilder.
     )
     ```
 
-    Groups can be named unnamed. See the available [groups](api-reference/groups.md).
+    Groups can be named or unnamed. See the available [groups](api-reference/groups.md).
 
 6. Set the flags for the regular expression and compile.
 
