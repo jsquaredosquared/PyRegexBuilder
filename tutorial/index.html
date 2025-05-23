@@ -563,6 +563,7 @@
 <p>Create a character set that will match Greek or Latin letters.</p>
 <div class="highlight"><pre><span></span><code><span class="n">greek_or_latin</span> <span class="o">=</span> <span class="n">PosixClass</span><span class="p">(</span><span class="s2">&quot;IsGreek&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">UnicodeClass</span><span class="p">(</span><span class="s2">&quot;IsLatin&quot;</span><span class="p">))</span>
 </code></pre></div>
+<p>See the available <a href="../api-reference/character-classes/">character classes</a>.</p>
 </li>
 <li>
 <p>Now let's start constructing the regular expression.</p>
@@ -588,6 +589,7 @@
     <span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
+<p>See the available <a href="../api-reference/assertions/">assertions</a> and <a href="../api-reference/quantifiers/">quantifiers</a>.</p>
 </li>
 <li>
 <p>After looking behind, capture the current letter if it is part of the Cyrillic alphabet.</p>
@@ -602,19 +604,23 @@
     <span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
+<p>Groups can be named unnamed. See the available <a href="../api-reference/groups/">groups</a>.</p>
 </li>
 <li>
 <p>Set the flags for the regular expression and compile.</p>
+<p>(Here, these flags are not necessary; they are just an example.)</p>
 <div class="highlight"><pre><span></span><code><span class="n">greek_or_latin</span> <span class="o">=</span> <span class="n">PosixClass</span><span class="p">(</span><span class="s2">&quot;IsGreek&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">UnicodeClass</span><span class="p">(</span><span class="s2">&quot;IsLatin&quot;</span><span class="p">))</span>
 
 <span class="n">expression</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">Regex</span><span class="p">(</span>
         <span class="o">...</span>
     <span class="p">)</span>
+    <span class="o">.</span><span class="n">with_flags</span><span class="p">({</span><span class="s2">&quot;IGNORECASE&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
     <span class="o">.</span><span class="n">with_global_flags</span><span class="p">({</span><span class="s2">&quot;VERSION1&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
     <span class="o">.</span><span class="n">compile</span><span class="p">()</span>
 <span class="p">)</span>
 </code></pre></div>
+<p>See the available scoped and global flags <a href="../api-reference/common/">here</a>.</p>
 </li>
 <li>
 <p>Now you can use the regular expression. Here is the full code:</p>
@@ -636,6 +642,7 @@
         <span class="p">),</span>
         <span class="n">Capture</span><span class="p">(</span><span class="n">PosixClass</span><span class="p">(</span><span class="s2">&quot;IsCyrillic&quot;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;character&quot;</span><span class="p">),</span>
     <span class="p">)</span>
+    <span class="o">.</span><span class="n">with_flags</span><span class="p">({</span><span class="s2">&quot;IGNORECASE&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
     <span class="o">.</span><span class="n">with_global_flags</span><span class="p">({</span><span class="s2">&quot;VERSION1&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
     <span class="o">.</span><span class="n">compile</span><span class="p">()</span>
 <span class="p">)</span>
