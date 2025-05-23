@@ -648,7 +648,7 @@
 <span class="n">expression</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">Regex</span><span class="p">(</span>
         <span class="n">PositiveLookbehind</span><span class="p">(</span>
-            <span class="n">Optionally</span><span class="p">(</span><span class="n">greek_or_latin</span><span class="o">.</span><span class="n">inverted</span><span class="p">),</span>
+            <span class="n">ChoiceOf</span><span class="p">(</span><span class="n">Anchor</span><span class="o">.</span><span class="n">WORD_BOUNDARY</span><span class="p">,</span> <span class="n">greek_or_latin</span><span class="o">.</span><span class="n">inverted</span><span class="p">),</span>
             <span class="n">Repeat</span><span class="p">(</span><span class="n">greek_or_latin</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -699,7 +699,7 @@
 <span class="n">expression</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">Regex</span><span class="p">(</span>
         <span class="n">PositiveLookbehind</span><span class="p">(</span>
-            <span class="n">Optionally</span><span class="p">(</span><span class="n">greek_or_latin</span><span class="o">.</span><span class="n">inverted</span><span class="p">),</span>
+            <span class="n">ChoiceOf</span><span class="p">(</span><span class="n">Anchor</span><span class="o">.</span><span class="n">WORD_BOUNDARY</span><span class="p">,</span> <span class="n">greek_or_latin</span><span class="o">.</span><span class="n">inverted</span><span class="p">),</span>
             <span class="n">Repeat</span><span class="p">(</span>
                 <span class="n">greek_or_latin</span><span class="p">,</span>
                 <span class="n">count</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
